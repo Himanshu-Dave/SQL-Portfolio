@@ -11,18 +11,18 @@
 --     Result: 'Quick Chicken Bites'
 -- ============================================================
 
-CREATE FUNCTION dbo.fn_stuffchicken
+create function dbo.fn_stuffchicken
 (
     @RestaurantType VARCHAR(50)
 )
-RETURNS VARCHAR(100)
-AS
-BEGIN
-    RETURN STUFF(@RestaurantType, 6, 0, ' Chicken');
-END;
+returns VARCHAR(100)
+as
+begin
+    return STUFF(@RestaurantType, 6, 0, ' Chicken');
+end;
 
 -- Test the function
-SELECT dbo.fn_stuffchicken('Quick Bites') AS NewType;
+select dbo.fn_stuffchicken('Quick Bites') AS NewType;
 
 
 -- ============================================================
@@ -30,13 +30,13 @@ SELECT dbo.fn_stuffchicken('Quick Bites') AS NewType;
 --     Using the function created in Q1
 -- ============================================================
 
-SELECT
+select
     RestaurantName,
-    dbo.fn_stuffchicken(RestaurantType) AS ModifiedType,
+    dbo.fn_stuffchicken(RestaurantType) as ModifiedType,
     CuisinesType,
     Rating
 FROM Restaurants
-WHERE Rating = (SELECT MAX(Rating) FROM Restaurants);
+where Rating = (select MAX(Rating) from Restaurants);
 
 
 -- ============================================================
@@ -45,28 +45,28 @@ WHERE Rating = (SELECT MAX(Rating) FROM Restaurants);
 -- ============================================================
 
 SELECT *,
-    CASE
-        WHEN Rating > 4   THEN 'Excellent'
-        WHEN Rating > 3.5 THEN 'Good'
-        WHEN Rating > 3   THEN 'Average'
-        ELSE 'Bad'
-    END AS RatingStatus
-FROM Restaurants
-ORDER BY Rating DESC;
+    case
+    when Rating > 4   then 'Excellent'
+    WHEN Rating > 3.5 THEN 'Good'
+    when Rating > 3   then 'Average'
+    else 'Bad'
+    end as RatingStatus
+from Restaurants
+order by Rating DESC;
 
 
 -- ============================================================
 -- Q4. CEIL, FLOOR, ABS of Rating + current date parts
 -- ============================================================
 
-SELECT *,
-    FLOOR(Rating)                    AS FloorRating,
-    ABS(Rating)                      AS AbsoluteRating,
-    CEILING(Rating)                  AS CeilRating,
-    GETDATE()                        AS CurrentDate,
-    YEAR(GETDATE())                  AS CurrentYear,
-    DATENAME(MONTH, GETDATE())       AS CurrentMonth,
-    DAY(GETDATE())                   AS CurrentDay
+select *,
+    floor(Rating) AS FloorRating,
+    ABS(Rating) as AbsoluteRating,
+    ceiling(Rating) AS CeilRating,
+    GETDATE() as CurrentDate,
+    YEAR(GETDATE()) AS CurrentYear,
+    datename(MONTH, GETDATE()) AS CurrentMonth,
+    day(GETDATE()) as CurrentDay
 FROM Restaurants;
 
 
@@ -75,8 +75,9 @@ FROM Restaurants;
 --     ROLLUP adds a grand total row at the end
 -- ============================================================
 
-SELECT
+select
     RestaurantType,
-    SUM(AverageCost) AS TotalAvgCost
-FROM Restaurants
-GROUP BY ROLLUP(RestaurantType);
+    sum(AverageCost) as TotalAvgCost
+from Restaurants
+GROUP BY rollup(RestaurantType);
+
