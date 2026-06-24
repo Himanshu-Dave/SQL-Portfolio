@@ -11,15 +11,15 @@
 -- ============================================================
 
 CREATE PROCEDURE sp_GetRestaurantsWithBooking
-AS
-BEGIN
-    SELECT RestaurantName, RestaurantType, Cuisine
+as
+begin
+    select RestaurantName, RestaurantType, Cuisine
     FROM Restaurants
-    WHERE TableBooking <> 0;
-END;
+    where TableBooking <> 0;
+end;
 
 -- Execute
-EXEC sp_GetRestaurantsWithBooking;
+exec sp_GetRestaurantsWithBooking;
 
 
 -- ============================================================
@@ -28,20 +28,21 @@ EXEC sp_GetRestaurantsWithBooking;
 
 BEGIN TRANSACTION;
 
-    UPDATE Restaurants
+    update Restaurants
     SET Cuisine = 'Cafeteria'
-    WHERE Cuisine = 'Cafe';
+    where Cuisine = 'Cafe';
 
     -- Check result before rollback
-    SELECT RestaurantName, Cuisine
-    FROM Restaurants
+    select RestaurantName, Cuisine
+    from Restaurants
     WHERE Cuisine IN ('Cafe', 'Cafeteria');
 
 ROLLBACK TRANSACTION;
+
 -- Verifying the rollback restored original values
-SELECT RestaurantName, Cuisine
-FROM Restaurants
-WHERE Cuisine IN ('Cafe', 'Cafeteria');
+select RestaurantName, Cuisine
+from Restaurants
+where Cuisine IN ('Cafe', 'Cafeteria');
 
 
 -- ============================================================
@@ -49,17 +50,17 @@ WHERE Cuisine IN ('Cafe', 'Cafeteria');
 --     NOTE: must aggregate by Area first, then rank
 -- ============================================================
 
-WITH RankedAreas AS (
+with RankedAreas as (
     SELECT
         Area,
-        AVG(Rating)                                     AS AvgRating,
-        ROW_NUMBER() OVER (ORDER BY AVG(Rating) DESC)   AS RowNum
-    FROM Restaurants
+        avg(Rating)                                     AS AvgRating,
+        row_number() over (order by avg(Rating) DESC)   as RowNum
+    from Restaurants
     GROUP BY Area
 )
-SELECT Area, AvgRating
+select Area, AvgRating
 FROM RankedAreas
-WHERE RowNum <= 5;
+where RowNum <= 5;
 
 
 -- ============================================================
@@ -67,27 +68,27 @@ WHERE RowNum <= 5;
 -- ============================================================
 
 DECLARE @i INT = 1;
-WHILE @i <= 50
-BEGIN
-    PRINT @i;
-    SET @i = @i + 1;
-END;
+while @i <= 50
+begin
+    print @i;
+    set @i = @i + 1;
+end;
 
 
 -- ============================================================
 -- Q5. VIEW – Top 5 restaurants by highest rating
 -- ============================================================
 
-CREATE VIEW TopRatingRestaurants AS
+create view TopRatingRestaurants as
 SELECT TOP 5
     RestaurantName,
     Area,
     Rating
-FROM Restaurants
-ORDER BY Rating DESC;
+from Restaurants
+order by Rating DESC;
 
 -- Query the view
-SELECT * FROM TopRatingRestaurants;
+select * FROM TopRatingRestaurants;
 
 
 -- ============================================================
@@ -97,7 +98,8 @@ SELECT * FROM TopRatingRestaurants;
 CREATE TRIGGER trg_NewRestaurant
 ON Restaurants
 AFTER INSERT
-AS
-BEGIN
-    PRINT 'A new restaurant record has been inserted!';
-END;
+as
+begin
+    print 'A new restaurant record has been inserted!';
+end;
+
