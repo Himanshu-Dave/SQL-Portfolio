@@ -32,7 +32,7 @@ sql-portfolio/
 │   ├── case-study-1-sales-analytics.sql        ← 29 queries on a 4200-row fact table
 │   └── case-study-2-employee-db.sql            ← Full HR schema + 50+ queries
 │
-├── 8weekschallenge/
+├── 8weeksqlchallenge/
 │   ├── case-study-1-dannys-diner/
 │   │   └── dannys-diner.sql                    ← Customer spend, popularity, membership behavior, loyalty points
 │   │
